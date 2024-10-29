@@ -4,7 +4,7 @@ import path from 'path';
 import {LocalStorage} from 'node-localstorage';
 import fsp from 'fs/promises';
 
-const localStorage = new LocalStorage('./storage');
+const localStorage = new LocalStorage('storage');
 
 const app = express();
 
