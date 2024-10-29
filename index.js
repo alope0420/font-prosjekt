@@ -3,8 +3,9 @@ import logger from 'morgan';
 import path from 'path';
 import {LocalStorage} from 'node-localstorage';
 import fsp from 'fs/promises';
+import process from 'process'
 
-const localStorage = new LocalStorage(path.join(import.meta.dirname, 'storage'));
+const localStorage = new LocalStorage(path.join(process.cwd(), 'storage'));
 
 const app = express();
 
