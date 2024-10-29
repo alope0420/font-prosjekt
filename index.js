@@ -50,7 +50,7 @@ app.get('/responses', (req, res) => {
     res.render('responses', {columns, rows});
 });
 
-app.get('/:questionLimit?', (req, res) => {
+app.get('/', (req, res) => {
     
     const limit = req.params.questionLimit ?? allWords.length;
     const wordSet = allWords.slice(0, limit);
