@@ -9,11 +9,11 @@ const localStorage = new LocalStorage('/tmp/storage');
 
 const app = express();
 
-app.set('views', path.join(import.meta.dirname, 'views'));
+app.set('views', path.join(process.cwd(), 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
-app.use(express.static(path.join(import.meta.dirname, 'static')));
+app.use(express.static(path.join(process.cwd(), 'static')));
 
 app.use(express.json());
 
