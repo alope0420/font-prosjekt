@@ -4,7 +4,7 @@ import path from 'path';
 import {LocalStorage} from 'node-localstorage';
 import fsp from 'fs/promises';
 
-const localStorage = new LocalStorage('storage');
+const localStorage = new LocalStorage(path.join(import.meta.dirname, 'storage'));
 
 const app = express();
 
@@ -52,7 +52,7 @@ app.get('/responses', (req, res) => {
 
 app.get('/', (req, res) => {
     
-    const limit = req.params.questionLimit ?? allWords.length;
+    const limit = req.query.questionLimit ?? allWords.length;
     const wordSet = allWords.slice(0, limit);
 
     let questions = ['comic', 'arial'].flatMap(font =>
