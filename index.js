@@ -70,4 +70,6 @@ app.get('/', (req, res) => {
     res.render('survey', {questions});
 });
 
-app.listen(81, 'localhost');
+//app.listen(81, 'localhost');
+//export default app;
+app.listen(80);
