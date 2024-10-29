@@ -1,0 +1,44 @@
+<%- include('header') %>
+
+<div class="container border bg-body my-4 p-4" style="max-width: 540px;">
+
+    <h1>Font-prosjekt</h1>
+
+    <div id="intro-message">
+        <p>
+            Dette er et fett spørreskjema. Vi stjeler ikke personopplysningene dine, trust me bro
+        </p>
+        <button class="btn btn-primary" onclick="startSurvey()">Start undersøkelsen</button>
+    </div>
+    <div id="progress" class="d-none">
+        <span class="badge text-bg-primary">Spørsmål <span id="current-question">0</span>&nbsp;/&nbsp;<%= questions.length %></span>
+        <span class="badge text-bg-success"><span id="correct-answers">0</span> riktige</span>
+        <span class="badge text-bg-danger"><span id="wrong-answers">0</span> feil</span>
+    </div>
+    <div id="exit-message" class="d-none">
+        <p>
+            Svarene er registrert. Takk for hjelpen!
+        </p>
+    </div>
+
+    <% for (const [index, question] of questions.entries()) { %>
+        <div id="question-<%= index %>"
+                    data-this-question="<%= index %>"
+                    data-next-question="<%= index + 1 %>"
+                    data-question-id="<%= question.id %>"
+                    data-last-question="<%= (index + 1 >= questions.length) %>"
+                    class="question d-none">
+            <div class="alert alert-info mt-4">
+                Finn ordet: <span class="fs-3 font-<%= question.font %>"><%= question.targetWord %></span>
+            </div>
+            <p class="font-<%= question.font %>">
+                <% for (const word of question.words) { %>
+                    <span onclick="chooseOption(this)" class="word"
+                            data-correct-option="<%= (word === question.targetWord) %>"><%= word %></span>
+                <% } %>
+            </p>
+        </div>
+    <% } %>
+</div>
+
+<%- include('footer') %>
