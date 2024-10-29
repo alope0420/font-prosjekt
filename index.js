@@ -17,7 +17,7 @@ app.use(express.static(path.join(import.meta.dirname, 'static')));
 
 app.use(express.json());
 
-const allWords = JSON.parse(await fsp.readFile('words.json'));
+const allWords = JSON.parse(await fsp.readFile(path.join(process.cwd(), 'words.json')));
 
 function shuffle(array) {
     let i = array.length;
