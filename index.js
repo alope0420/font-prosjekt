@@ -1,11 +1,17 @@
 import express from 'express';
 import logger from 'morgan';
 import path from 'path';
-import {LocalStorage} from 'node-localstorage';
 import fsp from 'fs/promises';
 import process from 'process'
+import dotenv from 'dotenv';
+dotenv.config();
 
-const localStorage = new LocalStorage('/tmp/storage');
+import { Redis } from '@upstash/redis'
+
+const redis = new Redis({
+    url: process.env.KV_REST_API_URL,
+    token: process.env.KV_REST_API_TOKEN,
+});
 
 const app = express();
 
@@ -28,24 +34,19 @@ function shuffle(array) {
     return array;
 }
 
-app.post('/submit', (req, res) => {
+app.post('/submit', async (req, res) => {
     if (req.body === null || typeof req.body !== 'object' || Array.isArray(req.body) || !Object.keys(req.body).length) {
         res.status(400).send('not ok');
         return;
     }
 
-    console.log('inserting');
-
-    let responses = JSON.parse(localStorage.getItem('responses')) ?? [];
-    responses.push({...req.body, _resp_id: responses.length + 1});
-    console.log('responses', responses);
-    localStorage.setItem('responses', JSON.stringify(responses));
+    await redis.lpush('responses', {...req.body, _resp_id: await redis.llen('responses') + 1});
 
     res.status(200).send('ok');
 });
 
-app.get('/responses', (req, res) => {
-    const responses = JSON.parse(localStorage.getItem('responses')) ?? [];
+app.get('/responses', async (req, res) => {
+    const responses = await redis.lrange('responses', 0, -1);
     const columns = [...new Set(responses.flatMap(response => Object.keys(response)))].sort();
     const rows = responses.map(response => columns.map(col => response[col]));
     res.render('responses', {columns, rows});
@@ -70,6 +71,4 @@ app.get('/', (req, res) => {
     res.render('survey', {questions});
 });
 
-//app.listen(81, 'localhost');
-//export default app;
-app.listen(80);
+app.listen(81, 'localhost');
