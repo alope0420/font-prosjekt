@@ -27,7 +27,7 @@ router.post('/submit', async (req, res) => {
     }
 
     // Push new response to redis
-    await redis.lpush('responses', {...req.body, _resp_id: await redis.llen('responses') + 1});
+    await redis.lpush('responses', req.body);
 
     res.status(200).send('ok');
 });

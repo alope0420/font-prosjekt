@@ -1,8 +1,16 @@
 
 let time = Date.now();
-let response = {};
 let totalTime = 0;
 let correctAnswers = 0, wrongAnswers = 0, wrongAnswersCurrentQuestion = 0;
+
+if (!localStorage.getItem('browser-id')) {
+    const browserId = Array.from({length: 20}, () => Math.floor(Math.random() * 36).toString(36)).join('');
+    localStorage.setItem('browser-id', browserId);
+}
+const browserId = localStorage.getItem('browser-id');
+console.log('Browser ID:', browserId);
+
+let response = {browser_id: browserId};
 
 function startSurvey() {
     $('#intro-message').addClass('d-none');
