@@ -22,7 +22,7 @@ function deactivateQuestion(questionIndex, answeredCorrectly) {
     response['q' + $(`#question-${questionIndex}`).data().questionId + '_time'] = Date.now() - time;
 }
 
-function chooseOption(option) {
+async function chooseOption(option) {
     option = $(option);
     const parent = option.closest('.question');
     deactivateQuestion(parent.data().thisQuestion, option.data().correctOption);
@@ -34,19 +34,21 @@ function chooseOption(option) {
 
     if (parent.data().lastQuestion) {
         console.log(response);
-        submitResponse(response);
+        $('#submit-message').removeClass('d-none');
+        await submitResponse(response);
+        $('#submit-message').addClass('d-none');
         $('#exit-message').removeClass('d-none');
     } else {
         activateQuestion(parent.data().nextQuestion);
     }
 }
 
-function submitResponse(response) {
-    fetch('/submit', {
+async function submitResponse(response) {
+    return fetch('/submit', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(response),
-    })
+    });
 }
