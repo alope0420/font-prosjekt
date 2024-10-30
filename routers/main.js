@@ -49,10 +49,10 @@ router.get('/responses', async (req, res) => {
     res.render('responses', {columns, rows});
 });
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     
     // If a question limit is specified, we only take the first X sets of words
-    const limit = req.query.questionLimit ?? 32;
+    const limit = req.query.questionLimit ?? 16;
     const wordSet = shuffle(allWords).slice(0, limit);
     const WORDS_PER_SET = req.query.questionOptions ?? 20;
 
@@ -73,5 +73,9 @@ router.get('/', (req, res) => {
     // Shuffle actual question order
     questions = shuffle(questions);
 
-    res.render('survey', {questions});
+    console.log((await redis.lrange('responses', 0, -1)).map(response => response.totalTime).filter(x=>x));
+
+    const fastestTime = Math.min(...(await redis.lrange('responses', 0, -1)).map(response => response.totalTime).filter(x=>x)) || 0;
+
+    res.render('survey', {questions, fastestTime});
 });
