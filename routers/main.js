@@ -54,7 +54,7 @@ router.get('/', (req, res) => {
     // Make 1 question per font per word list
     let questions = ['comic', 'arial'].flatMap(font =>
         wordSet.map((words, index) => ({
-            id: `${index + 1}_${font}`, // Unique ID based on word list index + font name
+            id: `q${String(index + 1).padStart(2, '0')}_${font}`, // Unique ID based on word list index + font name
             words: shuffle(words), // Shuffle word list randomly every time
             targetWord: words[Math.floor(Math.random() * words.length)], // Always pick random target word
             font,

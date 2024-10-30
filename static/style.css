@@ -1,5 +1,10 @@
+@font-face {
+    font-family: 'comicsans';
+    src: url('https://github.com/antimatter15/doge/raw/refs/heads/master/Comic%20Sans%20MS.ttf');
+}
+
 .font-comic {
-    font-family: 'Comic Sans MS', 'Comic Sans';
+    font-family: 'Comic Sans MS', 'Comic Sans', comicsans;
 }
 
 .font-arial {

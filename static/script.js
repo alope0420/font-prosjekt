@@ -28,8 +28,8 @@ function deactivateQuestion(questionIndex, answeredCorrectly) {
 
     // Record time spent on question + whether correct answer was chosen
     const questionId = question.data().questionId;
-    response[`q${questionId}_correct`] = answeredCorrectly;
-    response[`q${questionId}_time`] = Date.now() - time;
+    response[`${questionId}_correct`] = answeredCorrectly;
+    response[`${questionId}_time`] = Date.now() - time;
 }
 
 async function chooseOption(option) {
