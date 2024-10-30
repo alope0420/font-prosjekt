@@ -6,7 +6,9 @@ const router = express.Router();
 export default router;
 
 // Read all word sets from file
-const allWords = JSON.parse(await fsp.readFile(path.join(process.cwd(), 'words.json')));
+const allWords = JSON.parse(await fsp.readFile(path.join(process.cwd(), 'words.json')))
+    .map(words => [...new Set(words)]);
+
 
 // Standard Fisher-Yates shuffle
 function shuffle(array) {
@@ -51,7 +53,7 @@ router.get('/', (req, res) => {
     
     // If a question limit is specified, we only take the first X sets of words
     const limit = req.query.questionLimit ?? allWords.length;
-    const wordSet = allWords.slice(0, limit);
+    const wordSet = shuffle(allWords).slice(0, limit);
     const WORDS_PER_SET = req.query.questionOptions ?? 20;
 
     // Make 1 question per font per word list
