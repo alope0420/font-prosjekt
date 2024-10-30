@@ -69,7 +69,10 @@ async function chooseOption(option) {
     
     // Otherwise, submit response and display feedback
     $('#submit-message').removeClass('d-none');
-    await submitResponse(response);
+    const ret = await submitResponse(response);
+    console.log(ret);
+    const json = await ret.json();
+    console.log(json);
     $('#submit-message').addClass('d-none');
     let fastestTime = $('#fastest-time').data().fastestTime;
     if (totalTime < fastestTime) {
@@ -78,6 +81,7 @@ async function chooseOption(option) {
     $('#fastest-time').text((fastestTime / 1000).toFixed(2))
     $('#total-time').text((totalTime / 1000).toFixed(2));
     $(`#wrong-answers-text`).text(wrongAnswers);
+    $(`#response-id`).text(json.responseId);
     $('#exit-message').removeClass('d-none');
 }
 
