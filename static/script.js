@@ -1,6 +1,8 @@
 
 let time = Date.now();
 let response = {};
+let totalTime = 0;
+let correctAnswers = 0, wrongAnswers = 0, wrongAnswersCurrentQuestion = 0;
 
 function startSurvey() {
     $('#intro-message').addClass('d-none');
@@ -20,7 +22,7 @@ function activateQuestion(questionIndex) {
     time = Date.now();
 }
 
-function deactivateQuestion(questionIndex, answeredCorrectly) {
+function deactivateQuestion(questionIndex, wrongAnswers) {
     // Hide the question
     questionIndex = parseInt(questionIndex);
     const question = $(`#question-${questionIndex}`);
@@ -28,19 +30,26 @@ function deactivateQuestion(questionIndex, answeredCorrectly) {
 
     // Record time spent on question + whether correct answer was chosen
     const questionId = question.data().questionId;
-    response[`${questionId}_correct`] = answeredCorrectly;
-    response[`${questionId}_time`] = Date.now() - time;
+    const timeSpent = Date.now() - time;
+    response[`${questionId}_wrong`] = wrongAnswers;
+    response[`${questionId}_time`] = timeSpent;
+    totalTime += timeSpent;
 }
 
 async function chooseOption(option) {
-    option = $(option);
-    const parent = option.closest('.question');
-    deactivateQuestion(parent.data().thisQuestion, option.data().correctOption);
+    // If wrong answer chosen, only increment incorrect answers counter
+    if (!option.data().correctOption) {
+        ++wrongAnswersCurrentQuestion;
+        $(`#wrong-answers`).text(++wrongAnswers);
+        return;
+    }
 
-    // Increment relevant counter
-    const counterId = (option.data().correctOption ? 'correct' : 'wrong');
-    const counter = parseInt($(`#${counterId}-answers`).text()) + 1;
-    $(`#${counterId}-answers`).text(counter);
+    // Otherwise, deactivate this question
+    const parent = option.closest('.question');
+    deactivateQuestion(parent.data().thisQuestion, wrongAnswersCurrentQuestion);
+
+    // Increment correct answers counter
+    wrongAnswersCurrentQuestion = 0;
 
     // Activate next question if there is one
     if (!parent.data().lastQuestion) {
@@ -52,6 +61,8 @@ async function chooseOption(option) {
     $('#submit-message').removeClass('d-none');
     await submitResponse(response);
     $('#submit-message').addClass('d-none');
+    $('#total-time').text((totalTime / 1000).toFixed(2));
+    $(`#wrong-answers-text`).text(++wrongAnswers);
     $('#exit-message').removeClass('d-none');
 }
 
