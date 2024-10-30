@@ -11,11 +11,13 @@ body {
 .font-comic {
     font-family: 'Comic Sans MS', 'Comic Sans', comicsans;
     letter-spacing: 0.4px;
+    font-size: 12pt;
 }
 
 .font-arial {
     font-family: Arial, Helvetica, sans-serif;
     letter-spacing: 0.4px;
+    font-size: 12.5pt;
 }
 
 .word:hover {

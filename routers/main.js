@@ -52,7 +52,7 @@ router.get('/responses', async (req, res) => {
 router.get('/', (req, res) => {
     
     // If a question limit is specified, we only take the first X sets of words
-    const limit = req.query.questionLimit ?? allWords.length;
+    const limit = req.query.questionLimit ?? 32;
     const wordSet = shuffle(allWords).slice(0, limit);
     const WORDS_PER_SET = req.query.questionOptions ?? 20;
 
