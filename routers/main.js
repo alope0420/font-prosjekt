@@ -9,7 +9,6 @@ export default router;
 const allWords = JSON.parse(await fsp.readFile(path.join(process.cwd(), 'words.json')))
     .map(words => [...new Set(words)]);
 
-
 // Standard Fisher-Yates shuffle
 function shuffle(array) {
     array = [...array];
@@ -72,8 +71,6 @@ router.get('/', async (req, res) => {
 
     // Shuffle actual question order
     questions = shuffle(questions);
-
-    console.log((await redis.lrange('responses', 0, -1)).map(response => response.totalTime).filter(x=>x));
 
     const fastestTime = Math.min(...(await redis.lrange('responses', 0, -1)).map(response => response.totalTime).filter(x=>x)) || 0;
 

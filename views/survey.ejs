@@ -68,7 +68,20 @@
             Raskeste tid til nå er <span id="fastest-time" data-fastest-time="<%= fastestTime %>">0</span> s.
             Takk for hjelpen!
         </p>
-        <button class="btn btn-primary" onclick="window.location.reload()">Ta testen på nytt</button>
+        <p>
+            Resultatene fra denne undersøkelsen vil bli analysert og brukt i et studentprosjekt ved OsloMet om hvordan
+            designvalg påvirker lesehastighet. Vi setter stor pris på din deltakelse, og bidraget ditt vil hjelpe oss
+            å forstå mer om hvordan fonter påvirker lesing.
+        </p>
+        <p>
+            Hvis du er interessert i å lære mer om dette emnet eller se resultatene fra undersøkelsen, kan du sende en e-post til en av oss.
+        </p>
+        <ul>
+        <% for (const [epost, navn] of Object.entries(ansvarlige)) { %>
+            <li><%= navn %> (<a href="mailto:<%= epost %>@oslomet.no"><%= epost %>@oslomet.no</a>)</li>
+        <% } %>
+        </ul>
+        <button class="btn btn-primary" onclick="window.location.reload()">Ta testen på nytt?</button>
     </div>
 
     <% for (const [index, question] of questions.entries()) { %>
