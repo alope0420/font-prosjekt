@@ -3,8 +3,8 @@ let time = Date.now();
 let totalTime = 0;
 let correctAnswers = 0, wrongAnswers = 0, wrongAnswersCurrentQuestion = 0;
 
-if (!localStorage.getItem('browser-id')) {
-    const browserId = Array.from({length: 20}, () => Math.floor(Math.random() * 36).toString(36)).join('');
+if (!localStorage.getItem('browser-id') || localStorage.getItem('browser-id').length > 15) {
+    const browserId = Array.from({length: 15}, () => Math.floor(Math.random() * 36).toString(36)).join('');
     localStorage.setItem('browser-id', browserId);
 }
 const browserId = localStorage.getItem('browser-id');

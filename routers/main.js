@@ -34,13 +34,14 @@ router.post('/submit', async (req, res) => {
 
 router.get('/responses', async (req, res) => {
     // Get responses as array from redis
-    const responses = await redis.lrange('responses', 0, -1);
+    const responses = (await redis.lrange('responses', 0, -1)).reverse();
 
     // Find all unique columns across all existing responses
-    const columns = [...new Set(responses.flatMap(response => Object.keys(response)))].sort();
+    let columns = [...new Set(responses.flatMap(response => Object.keys(response)))].sort();
 
     // Build rows from column names (allowing columns to be empty)
-    const rows = responses.map(response => columns.map(col => response[col]));
+    const rows = responses.map((response, index) => [index + 1, ...columns.map(col => response[col])]);
+    columns.unshift('response_id');
 
     // Render responses as table
     res.render('responses', {columns, rows});
