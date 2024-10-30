@@ -9,17 +9,27 @@ function startSurvey() {
 }
 
 function activateQuestion(questionIndex) {
+    // Display the question
     questionIndex = parseInt(questionIndex);
     $(`#question-${questionIndex}`).removeClass('d-none');
+
+    // Increment counter
     $('#current-question').text(questionIndex + 1);
+
+    // Record start time
     time = Date.now();
 }
 
 function deactivateQuestion(questionIndex, answeredCorrectly) {
+    // Hide the question
     questionIndex = parseInt(questionIndex);
-    $(`#question-${questionIndex}`).addClass('d-none');
-    response['q' + $(`#question-${questionIndex}`).data().questionId + '_correct'] = answeredCorrectly;
-    response['q' + $(`#question-${questionIndex}`).data().questionId + '_time'] = Date.now() - time;
+    const question = $(`#question-${questionIndex}`);
+    question.addClass('d-none');
+
+    // Record time spent on question + whether correct answer was chosen
+    const questionId = question.data().questionId;
+    response[`q${questionId}_correct`] = answeredCorrectly;
+    response[`q${questionId}_time`] = Date.now() - time;
 }
 
 async function chooseOption(option) {
@@ -32,15 +42,17 @@ async function chooseOption(option) {
     const counter = parseInt($(`#${counterId}-answers`).text()) + 1;
     $(`#${counterId}-answers`).text(counter);
 
-    if (parent.data().lastQuestion) {
-        console.log(response);
-        $('#submit-message').removeClass('d-none');
-        await submitResponse(response);
-        $('#submit-message').addClass('d-none');
-        $('#exit-message').removeClass('d-none');
-    } else {
+    // Activate next question if there is one
+    if (!parent.data().lastQuestion) {
         activateQuestion(parent.data().nextQuestion);
+        return;
     }
+    
+    // Otherwise, submit response and display feedback
+    $('#submit-message').removeClass('d-none');
+    await submitResponse(response);
+    $('#submit-message').addClass('d-none');
+    $('#exit-message').removeClass('d-none');
 }
 
 async function submitResponse(response) {
