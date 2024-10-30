@@ -10,6 +10,7 @@ const allWords = JSON.parse(await fsp.readFile(path.join(process.cwd(), 'words.j
 
 // Standard Fisher-Yates shuffle
 function shuffle(array) {
+    array = [...array];
     let i = array.length;
     while (i) {
         let j = Math.floor(Math.random() * i--);
@@ -62,7 +63,7 @@ router.get('/', (req, res) => {
     );
 
     // Shuffle actual question order
-    shuffle(questions);
+    questions = shuffle(questions);
 
     res.render('survey', {questions});
 });
