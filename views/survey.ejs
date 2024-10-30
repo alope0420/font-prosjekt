@@ -2,13 +2,51 @@
 
 <div class="container border bg-body my-4 p-4" style="max-width: 540px;">
 
-    <h1>Font-prosjekt</h1>
+    <h1>Fontfaktor</h1>
 
     <div id="intro-message">
         <p>
-            Dette er et fett spørreskjema. Vi stjeler ikke personopplysningene dine, trust me bro
+            Velkommen til Fontfaktor! Denne undersøkelsen utforsker hvordan ulike fonter påvirker lesehastighet og nøyaktighet.
+            Din deltakelse vil bidra til verdifull innsikt i et spennende felt!
         </p>
-        <button class="btn btn-primary" onclick="startSurvey()">Start undersøkelsen</button>
+        <h2 class="fs-5">Hva skal du gjøre?</h2>
+        <p>
+            Du vil bli presentert for et sett med oppgaver hvor du får et ord som du skal lete etter i en liste med lignende ord.
+            Oppgaven din er å finne og klikke på ordet så fort som mulig. Hvis du klikker feil, blir dette registrert,
+            men oppgaven fortsetter som før.
+        </p>
+        <h2 class="fs-5">Personvern</h2>
+        <p>
+            Vi samler ikke inn identifiserende data eller personopplysninger, det eneste som blir samlet er resultatene
+            og en tilfeldig generert ID.
+        </p>
+        <h2 class="fs-5">Viktig informasjon</h2>
+        <p>For å sikre nøyaktige resultater i dette eksperimentet, vil nettleserens standardinnstillinger
+            for fonttype og -størrelse bli midlertidig overstyrt. Vi beklager eventuelle ulemper dette måtte medføre.
+            Tiden vil bli tatt underveis, så jobb raskt og nøyaktig!
+        </p>
+        <h2 class="fs-5">Samtykke</h2>
+        <p>
+            Ved å klikke på &laquo;Start&raquo; bekrefter du at du har lest og forstått informasjonen ovenfor,
+            og at du samtykker til å delta i eksperimentet.
+        </p>
+        <p>
+            Takk for at du bidrar til forskningen!
+        </p>
+        <h2 class="fs-5">Ansvarlige for skjemaet</h2>
+        <ul>
+            <%
+            const ansvarlige = {
+                alope0420: 'Alexander Rød Opedal',
+                balin6546: 'Bård Linga',
+                kerem9811: 'Ken Solbakken Remen',
+                thlon2720: 'Thomas Stavik Lønning',
+            };
+            for (const [epost, navn] of Object.entries(ansvarlige)) { %>
+                <li><%= navn %> (<a href="mailto:<%= epost %>@oslomet.no"><%= epost %>@oslomet.no</a>)</li>
+            <% } %>
+        </ul>
+        <button class="btn btn-primary" onclick="startSurvey()">Start</button>
     </div>
     <div id="progress" class="d-none">
         <span class="badge text-bg-primary">Spørsmål <span id="current-question">0</span>&nbsp;/&nbsp;<%= questions.length %></span>
@@ -36,7 +74,7 @@
                     data-last-question="<%= (index + 1 >= questions.length) %>"
                     class="question d-none user-select-none">
             <div class="alert alert-info mt-4">
-                Finn ordet: <span class="fs-3 font-<%= question.font %>"><%= question.targetWord %></span>
+                Finn ordet: <span class="fs-5 font-<%= question.font %>"><%= question.targetWord %></span>
             </div>
             <p class="font-<%= question.font %>">
                 <% for (const word of question.words) { %>
