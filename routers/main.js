@@ -63,7 +63,7 @@ router.get('/', (req, res) => {
                 font,
             };
             // Always pick random target word, but not the first one
-            question.targetWord = question.words[1 + Math.floor(Math.random() * (WORDS_PER_SET - 1))];
+            question.targetWord = question.words[1 + Math.floor(Math.random() * (question.words.length - 1))];
             return question;
         })
     );
