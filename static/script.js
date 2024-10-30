@@ -64,11 +64,18 @@ async function chooseOption(option) {
         activateQuestion(parent.data().nextQuestion);
         return;
     }
+
+    response.totalTime = totalTime;
     
     // Otherwise, submit response and display feedback
     $('#submit-message').removeClass('d-none');
     await submitResponse(response);
     $('#submit-message').addClass('d-none');
+    let fastestTime = $('#fastest-time').data().fastestTime;
+    if (totalTime < fastestTime) {
+        fastestTime = totalTime;
+    }
+    $('#fastest-time').text((fastestTime / 1000).toFixed(2))
     $('#total-time').text((totalTime / 1000).toFixed(2));
     $(`#wrong-answers-text`).text(wrongAnswers);
     $('#exit-message').removeClass('d-none');
