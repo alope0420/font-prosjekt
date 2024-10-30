@@ -62,7 +62,7 @@ async function chooseOption(option) {
     await submitResponse(response);
     $('#submit-message').addClass('d-none');
     $('#total-time').text((totalTime / 1000).toFixed(2));
-    $(`#wrong-answers-text`).text(++wrongAnswers);
+    $(`#wrong-answers-text`).text(wrongAnswers);
     $('#exit-message').removeClass('d-none');
 }
 
