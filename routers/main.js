@@ -23,14 +23,14 @@ function shuffle(array) {
 router.post('/submit', async (req, res) => {
     // Don't add empty responses to db
     if (req.body === null || typeof req.body !== 'object' || Array.isArray(req.body) || !Object.keys(req.body).length) {
-        res.status(400).send('not ok');
+        res.status(400).send({});
         return;
     }
 
     // Push new response to redis
     await redis.lpush('responses', req.body);
 
-    res.status(200).send('ok');
+    res.status(200).send({responseId: await redis.llen('responses')});
 });
 
 router.get('/responses', async (req, res) => {
