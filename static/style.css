@@ -1,3 +1,8 @@
+body {
+    font-family: Arial, sans-serif !important;
+    font-size: 16px !important;
+}
+
 @font-face {
     font-family: 'comicsans';
     src: url('comic.ttf');
@@ -5,10 +10,14 @@
 
 .font-comic {
     font-family: 'Comic Sans MS', 'Comic Sans', comicsans;
+    letter-spacing: -0.2px;
+    line-height: 1.8;
 }
 
 .font-arial {
     font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 0.5px;
+    line-height: 1.6;
 }
 
 .word:hover {

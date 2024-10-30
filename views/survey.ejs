@@ -12,7 +12,6 @@
     </div>
     <div id="progress" class="d-none">
         <span class="badge text-bg-primary">Spørsmål <span id="current-question">0</span>&nbsp;/&nbsp;<%= questions.length %></span>
-        <span class="badge text-bg-success"><span id="correct-answers">0</span> riktige</span>
         <span class="badge text-bg-danger"><span id="wrong-answers">0</span> feil</span>
     </div>
     <div id="submit-message" class="d-none">
@@ -25,7 +24,7 @@
     </div>
     <div id="exit-message" class="d-none">
         <p>
-            Svarene er registrert. Takk for hjelpen!
+            Svarene er registrert. Du brukte <span id="total-time"></span> sekunder og hadde <span id="wrong-answers-text"></span> feil. Takk for hjelpen!
         </p>
     </div>
 
@@ -35,13 +34,13 @@
                     data-next-question="<%= index + 1 %>"
                     data-question-id="<%= question.id %>"
                     data-last-question="<%= (index + 1 >= questions.length) %>"
-                    class="question d-none">
+                    class="question d-none user-select-none">
             <div class="alert alert-info mt-4">
                 Finn ordet: <span class="fs-3 font-<%= question.font %>"><%= question.targetWord %></span>
             </div>
             <p class="font-<%= question.font %>">
                 <% for (const word of question.words) { %>
-                    <span onclick="chooseOption(this)" class="word"
+                    <span onclick="chooseOption($(this))" class="word"
                             data-correct-option="<%= (word === question.targetWord) %>"><%= word %></span>
                 <% } %>
             </p>
