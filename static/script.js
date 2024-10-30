@@ -56,7 +56,9 @@ async function chooseOption(option) {
     const parent = option.closest('.question');
     deactivateQuestion(parent.data().thisQuestion, wrongAnswersCurrentQuestion);
 
-    // Increment correct answers counter
+    // Increment progress bar
+    const elem = $('#survey-progress-bar');
+    elem.find('.progress-bar').css('width', (100 * (parseInt(parent.data().nextQuestion) / parseInt(elem.attr('aria-valuemax')))) + '%');
     wrongAnswersCurrentQuestion = 0;
 
     // Activate next question if there is one
