@@ -51,15 +51,20 @@ router.get('/', (req, res) => {
     // If a question limit is specified, we only take the first X sets of words
     const limit = req.query.questionLimit ?? allWords.length;
     const wordSet = allWords.slice(0, limit);
+    const WORDS_PER_SET = req.query.questionOptions ?? 20;
 
     // Make 1 question per font per word list
     let questions = ['comic', 'arial'].flatMap(font =>
-        wordSet.map((words, index) => ({
-            id: `q${String(index + 1).padStart(2, '0')}_${font}`, // Unique ID based on word list index + font name
-            words: shuffle(words), // Shuffle word list randomly every time
-            targetWord: words[Math.floor(Math.random() * words.length)], // Always pick random target word
-            font,
-        }))
+        wordSet.map((words, index) => {
+            let question = {
+                id: `q${String(index + 1).padStart(2, '0')}_${font}`, // Unique ID based on word list index + font name
+                words: shuffle(words).slice(0, WORDS_PER_SET), // Shuffle word list randomly every time
+                font,
+            };
+            // Always pick random target word, but not the first one
+            question.targetWord = question.words[1 + Math.floor(Math.random() * (WORDS_PER_SET - 1))];
+            return question;
+        })
     );
 
     // Shuffle actual question order
