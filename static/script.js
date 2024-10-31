@@ -10,7 +10,7 @@ if (!localStorage.getItem('browser-id') || localStorage.getItem('browser-id').le
 const browserId = localStorage.getItem('browser-id');
 console.log('Browser ID:', browserId);
 
-let response = {browser_id: browserId};
+let response = [];
 
 function startSurvey() {
     $('#intro-message').addClass('d-none');
@@ -39,8 +39,13 @@ function deactivateQuestion(questionIndex, wrongAnswers) {
     // Record time spent on question + whether correct answer was chosen
     const questionId = question.data().questionId;
     const timeSpent = Date.now() - time;
-    response[`${questionId}_wrong`] = wrongAnswers;
-    response[`${questionId}_time`] = timeSpent;
+    response.push({
+        browser_id: browserId,
+        question_number: questionId,
+        font: question.data().font,
+        time: timeSpent,
+        errors: wrongAnswers,
+    });
     totalTime += timeSpent;
 }
 
@@ -67,7 +72,7 @@ async function chooseOption(option) {
         return;
     }
 
-    response.totalTime = totalTime;
+    response.push(totalTime);
     
     // Otherwise, submit response and display feedback
     $('#submit-message').removeClass('d-none');
