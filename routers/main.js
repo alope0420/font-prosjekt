@@ -60,11 +60,12 @@ router.get('/', async (req, res) => {
     const WORDS_PER_SET = req.query.questionOptions ?? 20;
 
     // Make 1 question per font per word list
-    let questions = ['comic', 'arial'].flatMap(font =>
+    let questions = ['arial', 'comic'].flatMap((font, fontIndex) =>
         wordSet.map((words, index) => {
             let question = {
                 id: index + 1,
                 font,
+                fontIndex,
                 words: shuffle(words).slice(0, WORDS_PER_SET), // Shuffle word list randomly every time
             };
             // Always pick random target word, but not the first one
