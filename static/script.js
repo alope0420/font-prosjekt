@@ -10,6 +10,21 @@ if (!localStorage.getItem('browser-id') || localStorage.getItem('browser-id').le
 const browserId = localStorage.getItem('browser-id');
 console.log('Browser ID:', browserId);
 
+let totals = [
+    {
+        font: 0,
+        time: 0,
+        errors: 0,
+        browser_id: browserId,
+    },
+    {
+        font: 1,
+        time: 0,
+        errors: 0,
+        browser_id: browserId,
+    }
+];
+
 let response = [];
 
 function startSurvey() {
@@ -46,6 +61,8 @@ function deactivateQuestion(questionIndex, wrongAnswers) {
         time: timeSpent,
         errors: wrongAnswers,
     });
+    totals[parseInt(question.data().font)].time += timeSpent;
+    totals[parseInt(question.data().font)].errors += wrongAnswers;
     totalTime += timeSpent;
 }
 
@@ -72,6 +89,7 @@ async function chooseOption(option) {
         return;
     }
 
+    response.push(totals);
     response.push(totalTime);
     
     // Otherwise, submit response and display feedback
