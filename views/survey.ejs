@@ -99,6 +99,7 @@
                     data-next-question="<%= index + 1 %>"
                     data-question-id="<%= question.id %>"
                     data-last-question="<%= (index + 1 >= questions.length) %>"
+                    data-font="<%= question.font %>"
                     class="question d-none user-select-none">
             <div class="alert alert-info mt-4">
                 Finn ordet: <span class="fs-5 font-<%= question.font %>"><%= question.targetWord %></span>

@@ -22,27 +22,31 @@ function shuffle(array) {
 
 router.post('/submit', async (req, res) => {
     // Don't add empty responses to db
-    if (req.body === null || typeof req.body !== 'object' || Array.isArray(req.body) || !Object.keys(req.body).length) {
+    if (req.body === null || !Array.isArray(req.body)) {
         res.status(400).send({});
         return;
     }
 
-    // Push new response to redis
-    await redis.lpush('responses', req.body);
+    const response_id = parseInt(await redis.get('last_response_id') ?? 0) + 1;
+    const totalTime = req.body.pop();
+    const rows = req.body.map(row => ({...row, response_id}));
 
-    res.status(200).send({responseId: await redis.llen('responses')});
+    // Push new response to redis
+    await redis.set('last_response_id', response_id);
+    await redis.lpush('rows', ...rows);
+    await redis.lpush('total_time', totalTime);
+    console.log('redis done');
+
+    res.status(200).send({responseId: response_id});
 });
 
 router.get('/responses', async (req, res) => {
     // Get responses as array from redis
-    const responses = (await redis.lrange('responses', 0, -1)).reverse();
+    const responses = (await redis.lrange('rows', 0, -1)).reverse();
+    let columns = ['response_id', 'browser_id', 'question_number', 'font', 'time', 'errors'];
 
-    // Find all unique columns across all existing responses
-    let columns = [...new Set(responses.flatMap(response => Object.keys(response)))].sort();
-
-    // Build rows from column names (allowing columns to be empty)
-    const rows = responses.map((response, index) => [index + 1, ...columns.map(col => response[col])]);
-    columns.unshift('response_id');
+    // Build rows from column names
+    const rows = responses.map(response => [...columns.map(col => response[col])]);
 
     // Render responses as table
     res.render('responses', {columns, rows});
@@ -59,9 +63,9 @@ router.get('/', async (req, res) => {
     let questions = ['comic', 'arial'].flatMap(font =>
         wordSet.map((words, index) => {
             let question = {
-                id: `q${String(index + 1).padStart(2, '0')}_${font}`, // Unique ID based on word list index + font name
-                words: shuffle(words).slice(0, WORDS_PER_SET), // Shuffle word list randomly every time
+                id: index + 1,
                 font,
+                words: shuffle(words).slice(0, WORDS_PER_SET), // Shuffle word list randomly every time
             };
             // Always pick random target word, but not the first one
             question.targetWord = question.words[1 + Math.floor(Math.random() * (question.words.length - 1))];
@@ -72,7 +76,7 @@ router.get('/', async (req, res) => {
     // Shuffle actual question order
     questions = shuffle(questions);
 
-    const fastestTime = Math.min(...(await redis.lrange('responses', 0, -1)).map(response => response.totalTime).filter(x=>x)) || 0;
+    //const fastestTime = Math.min(...(await redis.lrange('responses', 0, -1)).map(response => response.totalTime).filter(x=>x)) || 0;
 
-    res.render('survey', {questions, fastestTime});
+    res.render('survey', {questions, fastestTime: Math.min(...(await redis.lrange('total_time', 0, -1)))});
 });
