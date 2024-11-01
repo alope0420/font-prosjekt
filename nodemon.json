@@ -2,7 +2,7 @@
     "watch": [
         "*"
     ],
-    "ext": "js,json,ejs,cjs",
+    "ext": "js,json,ejs,cjs,css",
     "execMap": {
         "js": "node"
     }

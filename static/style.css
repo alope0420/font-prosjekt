@@ -10,16 +10,16 @@ body {
 
 .font-comic {
     font-family: 'Comic Sans MS', 'Comic Sans', comicsans;
-    letter-spacing: -0.2px;
-    line-height: 1.8;
+    letter-spacing: 0.4px;
+    font-size: 12pt;
 }
 
 .font-arial {
     font-family: Arial, Helvetica, sans-serif;
-    letter-spacing: 0.5px;
-    line-height: 1.6;
+    letter-spacing: 0.4px;
+    font-size: 12.5pt;
 }
 
 .word:hover {
-    background-color: yellow;
+    background-color: rgba(255, 255, 0, 0.3);
 }

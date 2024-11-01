@@ -10,7 +10,22 @@ if (!localStorage.getItem('browser-id') || localStorage.getItem('browser-id').le
 const browserId = localStorage.getItem('browser-id');
 console.log('Browser ID:', browserId);
 
-let response = {browser_id: browserId};
+let totals = [
+    {
+        font: 0,
+        time: 0,
+        errors: 0,
+        browser_id: browserId,
+    },
+    {
+        font: 1,
+        time: 0,
+        errors: 0,
+        browser_id: browserId,
+    }
+];
+
+let response = [];
 
 function startSurvey() {
     $('#intro-message').addClass('d-none');
@@ -39,8 +54,15 @@ function deactivateQuestion(questionIndex, wrongAnswers) {
     // Record time spent on question + whether correct answer was chosen
     const questionId = question.data().questionId;
     const timeSpent = Date.now() - time;
-    response[`${questionId}_wrong`] = wrongAnswers;
-    response[`${questionId}_time`] = timeSpent;
+    response.push({
+        browser_id: browserId,
+        question_number: questionId,
+        font: question.data().font,
+        time: timeSpent,
+        errors: wrongAnswers,
+    });
+    totals[parseInt(question.data().font)].time += timeSpent;
+    totals[parseInt(question.data().font)].errors += wrongAnswers;
     totalTime += timeSpent;
 }
 
@@ -56,7 +78,9 @@ async function chooseOption(option) {
     const parent = option.closest('.question');
     deactivateQuestion(parent.data().thisQuestion, wrongAnswersCurrentQuestion);
 
-    // Increment correct answers counter
+    // Increment progress bar
+    const elem = $('#survey-progress-bar');
+    elem.find('.progress-bar').css('width', (100 * (parseInt(parent.data().nextQuestion) / parseInt(elem.attr('aria-valuemax')))) + '%');
     wrongAnswersCurrentQuestion = 0;
 
     // Activate next question if there is one
@@ -64,13 +88,25 @@ async function chooseOption(option) {
         activateQuestion(parent.data().nextQuestion);
         return;
     }
+
+    response.push(totals);
+    response.push(totalTime);
     
     // Otherwise, submit response and display feedback
     $('#submit-message').removeClass('d-none');
-    await submitResponse(response);
+    const ret = await submitResponse(response);
+    console.log(ret);
+    const json = await ret.json();
+    console.log(json);
     $('#submit-message').addClass('d-none');
+    let fastestTime = $('#fastest-time').data().fastestTime;
+    if (totalTime < fastestTime) {
+        fastestTime = totalTime;
+    }
+    $('#fastest-time').text((fastestTime / 1000).toFixed(2))
     $('#total-time').text((totalTime / 1000).toFixed(2));
     $(`#wrong-answers-text`).text(wrongAnswers);
+    $(`#response-id`).text(json.responseId);
     $('#exit-message').removeClass('d-none');
 }
 
