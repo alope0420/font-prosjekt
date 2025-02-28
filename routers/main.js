@@ -34,12 +34,12 @@ router.post('/submit', async (req, res) => {
     const response_id = parseInt(await redis.get('last_response_id') ?? 0) + 1;
     const totalTime = req.body.pop();
     const totalsJson = req.body.pop();
-    const rows = req.body.map(row => ({...row, response_id}));
+    const responses = req.body.map(row => ({...row, response_id}));
     const totals = totalsJson.map(row => ({...row, response_id}));
 
     // Push new response to redis
     await redis.set('last_response_id', response_id);
-    await redis.lpush('rows', ...rows);
+    await redis.lpush('responses', ...responses);
     await redis.lpush('totals', ...totals);
     await redis.lpush('total_time', totalTime);
     console.log('redis done');
@@ -49,7 +49,7 @@ router.post('/submit', async (req, res) => {
 
 router.get('/responses', async (req, res) => {
     // Get responses as array from redis
-    const responses = (await redis.lrange('rows', 0, -1)).reverse();
+    const responses = (await redis.lrange('responses', 0, -1)).reverse();
     let columns = ['response_id', 'browser_id', 'question_number', 'font', 'time', 'errors'];
 
     // Build rows from column names
