@@ -46,16 +46,17 @@ function deactivateQuestion(questionIndex, wrongAnswers) {
 
     // Record time spent on question + whether correct answer was chosen
     const questionId = question.data().questionId;
+    const font = question.data().font;
     const timeSpent = Date.now() - time;
     response.responses.push({
         browser_id: browserId,
         question_number: questionId,
-        font: question.data().font,
+        font,
         time: timeSpent,
         errors: wrongAnswers,
     });
-    response.totals[parseInt(question.data().font)].time += timeSpent;
-    response.totals[parseInt(question.data().font)].errors += wrongAnswers;
+    response.totals[font].time += timeSpent;
+    response.totals[font].errors += wrongAnswers;
     response.totalTime += timeSpent;
 }
 
