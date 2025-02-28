@@ -6,6 +6,8 @@ const router = express.Router();
 export default router;
 
 const FONTS = ['arial', 'comic']; // Only used for applying correct CSS styles in frontend
+const QUESTIONS_PER_FONT = 16;
+const OPTIONS_PER_QUESTION = 20;
 
 // Read all word sets from file
 const allWords = JSON.parse(await fsp.readFile(path.join(process.cwd(), 'words.json')))
@@ -72,9 +74,9 @@ router.get('/totals', async (req, res) => {
 router.get('/', async (req, res) => {
     
     // If a question limit is specified, we only take the first X sets of words
-    const limit = req.query.questionLimit ?? 16;
+    const limit = req.query.questionLimit ?? QUESTIONS_PER_FONT;
     const wordSet = shuffle(allWords).slice(0, limit);
-    const WORDS_PER_SET = req.query.questionOptions ?? 20;
+    const WORDS_PER_SET = req.query.questionOptions ?? OPTIONS_PER_QUESTION;
 
     // Make 1 question per font per word list
     let questions = FONTS.flatMap((font, fontIndex) =>
