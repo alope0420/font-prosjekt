@@ -89,10 +89,8 @@ async function chooseOption(option) {
     const json = await ret.json();
     console.log(json);
     $('#submit-message').addClass('d-none');
-    let fastestTime = $('#fastest-time').data().fastestTime;
-    if (response.totalTime < fastestTime) {
-        fastestTime = response.totalTime;
-    }
+    
+    let fastestTime = Math.min(response.totalTime, $('#fastest-time').data().fastestTime);
     $('#fastest-time').text((fastestTime / 1000).toFixed(2))
     $('#total-time').text((response.totalTime / 1000).toFixed(2));
     $(`#wrong-answers-text`).text(wrongAnswers);
