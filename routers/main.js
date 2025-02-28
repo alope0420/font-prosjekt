@@ -5,6 +5,8 @@ import path from 'path';
 const router = express.Router();
 export default router;
 
+const FONTS = ['arial', 'comic']; // Only used for applying correct CSS styles in frontend
+
 // Read all word sets from file
 const allWords = JSON.parse(await fsp.readFile(path.join(process.cwd(), 'words.json')))
     .map(words => [...new Set(words)]);
@@ -75,7 +77,7 @@ router.get('/', async (req, res) => {
     const WORDS_PER_SET = req.query.questionOptions ?? 20;
 
     // Make 1 question per font per word list
-    let questions = ['arial', 'comic'].flatMap((font, fontIndex) =>
+    let questions = FONTS.flatMap((font, fontIndex) =>
         wordSet.map((words, index) => {
             let question = {
                 id: index + 1,
