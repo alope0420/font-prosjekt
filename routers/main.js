@@ -25,6 +25,29 @@ function shuffle(array) {
     return array;
 }
 
+async function renderTabularData(responseObject, redisLrangeName, columns) {
+    // Get responses as array from redis
+    const responses = (await redis.lrange(redisLrangeName, 0, -1)).reverse();
+
+    // Build rows from column names
+    const rows = responses.map(response => [...columns.map(col => response[col])]);
+
+    // Render responses as table
+    responseObject.render('tabular_data', {columns, rows});
+}
+
+router.get('/responses', async (req, res) => {
+    await renderTabularData(res, 'responses',
+        ['response_id', 'browser_id', 'question_number', 'font', 'time', 'errors']
+    );
+});
+
+router.get('/totals', async (req, res) => {
+    await renderTabularData(res, 'totals',
+        ['response_id', 'browser_id', 'font', 'time', 'errors']
+    );
+});
+
 router.post('/submit', async (req, res) => {
     // Don't add empty responses to db
     const data = req.body;
@@ -46,30 +69,6 @@ router.post('/submit', async (req, res) => {
     console.log('redis done');
 
     res.status(200).send({responseId});
-});
-
-router.get('/responses', async (req, res) => {
-    // Get responses as array from redis
-    const responses = (await redis.lrange('responses', 0, -1)).reverse();
-    let columns = ['response_id', 'browser_id', 'question_number', 'font', 'time', 'errors'];
-
-    // Build rows from column names
-    const rows = responses.map(response => [...columns.map(col => response[col])]);
-
-    // Render responses as table
-    res.render('tabular_data', {columns, rows});
-});
-
-router.get('/totals', async (req, res) => {
-    // Get responses as array from redis
-    const responses = (await redis.lrange('totals', 0, -1)).reverse();
-    let columns = ['response_id', 'browser_id', 'font', 'time', 'errors'];
-
-    // Build rows from column names
-    const rows = responses.map(response => [...columns.map(col => response[col])]);
-
-    // Render responses as table
-    res.render('tabular_data', {columns, rows});
 });
 
 router.get('/', async (req, res) => {
