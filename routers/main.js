@@ -96,6 +96,6 @@ router.get('/', async (req, res) => {
 
     // Shuffle actual question order
     questions = shuffle(questions);
-
-    res.render('survey', {questions, fastestTime: Math.min(...(await redis.lrange('total_time', 0, -1)))});
+    const totalTimes = await redis.lrange('total_time', 0, -1);
+    res.render('survey', {questions, fastestTime: Math.min(...totalTimes)});
 });
