@@ -10,8 +10,8 @@ const QUESTIONS_PER_FONT = 16;
 const OPTIONS_PER_QUESTION = 20;
 
 // Read all word sets from file
-const allWords = JSON.parse(await fsp.readFile(path.join(process.cwd(), 'words.json')))
-    .map(words => [...new Set(words)]);
+const wordlist = await fsp.readFile(path.join(process.cwd(), 'words.json'));
+const allWords = JSON.parse(wordlist).map(words => [...new Set(words)]); // Discard duplicate words
 
 // Standard Fisher-Yates shuffle
 function shuffle(array) {
