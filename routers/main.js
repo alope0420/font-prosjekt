@@ -52,7 +52,7 @@ router.get('/responses', async (req, res) => {
     const rows = responses.map(response => [...columns.map(col => response[col])]);
 
     // Render responses as table
-    res.render('responses', {columns, rows});
+    res.render('tabular_data', {columns, rows});
 });
 
 router.get('/totals', async (req, res) => {
@@ -64,7 +64,7 @@ router.get('/totals', async (req, res) => {
     const rows = responses.map(response => [...columns.map(col => response[col])]);
 
     // Render responses as table
-    res.render('responses', {columns, rows});
+    res.render('tabular_data', {columns, rows});
 });
 
 router.get('/', async (req, res) => {
