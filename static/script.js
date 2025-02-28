@@ -1,9 +1,9 @@
 
 let time = Date.now();
-let totalTime = 0;
 let correctAnswers = 0, wrongAnswers = 0, wrongAnswersCurrentQuestion = 0;
 
 const BROWSER_ID_LENGTH = 15;
+const NUMBER_OF_FONTS = 2;
 
 if (!localStorage.getItem('browser-id')) {
     const browserId = Array.from({length: BROWSER_ID_LENGTH}, () => Math.floor(Math.random() * 36).toString(36)).join('');
@@ -12,22 +12,13 @@ if (!localStorage.getItem('browser-id')) {
 const browserId = localStorage.getItem('browser-id');
 console.log('Browser ID:', browserId);
 
-let totals = [
-    {
-        font: 0,
-        time: 0,
-        errors: 0,
-        browser_id: browserId,
-    },
-    {
-        font: 1,
-        time: 0,
-        errors: 0,
-        browser_id: browserId,
-    }
-];
-
-let response = [];
+let response = {
+    responses: [],
+    totals: Array.from({length: NUMBER_OF_FONTS}, (_, index) => ({
+        font: index, time: 0, errors: 0, browser_id: browserId
+    })),
+    totalTime: 0,
+}
 
 function startSurvey() {
     $('#intro-message').addClass('d-none');
@@ -56,16 +47,16 @@ function deactivateQuestion(questionIndex, wrongAnswers) {
     // Record time spent on question + whether correct answer was chosen
     const questionId = question.data().questionId;
     const timeSpent = Date.now() - time;
-    response.push({
+    response.responses.push({
         browser_id: browserId,
         question_number: questionId,
         font: question.data().font,
         time: timeSpent,
         errors: wrongAnswers,
     });
-    totals[parseInt(question.data().font)].time += timeSpent;
-    totals[parseInt(question.data().font)].errors += wrongAnswers;
-    totalTime += timeSpent;
+    response.totals[parseInt(question.data().font)].time += timeSpent;
+    response.totals[parseInt(question.data().font)].errors += wrongAnswers;
+    response.totalTime += timeSpent;
 }
 
 async function chooseOption(option) {
@@ -90,9 +81,6 @@ async function chooseOption(option) {
         activateQuestion(parent.data().nextQuestion);
         return;
     }
-
-    response.push(totals);
-    response.push(totalTime);
     
     // Otherwise, submit response and display feedback
     $('#submit-message').removeClass('d-none');
@@ -102,11 +90,11 @@ async function chooseOption(option) {
     console.log(json);
     $('#submit-message').addClass('d-none');
     let fastestTime = $('#fastest-time').data().fastestTime;
-    if (totalTime < fastestTime) {
-        fastestTime = totalTime;
+    if (response.totalTime < fastestTime) {
+        fastestTime = response.totalTime;
     }
     $('#fastest-time').text((fastestTime / 1000).toFixed(2))
-    $('#total-time').text((totalTime / 1000).toFixed(2));
+    $('#total-time').text((response.totalTime / 1000).toFixed(2));
     $(`#wrong-answers-text`).text(wrongAnswers);
     $(`#response-id`).text(json.responseId);
     $('#exit-message').removeClass('d-none');

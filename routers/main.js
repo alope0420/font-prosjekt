@@ -26,16 +26,16 @@ function shuffle(array) {
 
 router.post('/submit', async (req, res) => {
     // Don't add empty responses to db
-    if (req.body === null || !Array.isArray(req.body)) {
+    const data = req.body;
+    if (!data?.responses || !data?.totals) {
         res.status(400).send({});
         return;
     }
 
-    const response_id = parseInt(await redis.get('last_response_id') ?? 0) + 1;
-    const totalTime = req.body.pop();
-    const totalsJson = req.body.pop();
-    const responses = req.body.map(row => ({...row, response_id}));
-    const totals = totalsJson.map(row => ({...row, response_id}));
+    let {responses, totals, totalTime} = data;
+    const response_id = parseInt(await redis.get('last_response_id') ?? 0) + 1; // Display IDs 1-based
+    responses = responses.map(row => ({...row, response_id}));
+    totals = totals.map(row => ({...row, response_id}));
 
     // Push new response to redis
     await redis.set('last_response_id', response_id);
