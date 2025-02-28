@@ -5,12 +5,13 @@ import path from 'path';
 const router = express.Router();
 export default router;
 
+const WORDLIST_FILE = 'words.json';
 const FONTS = ['arial', 'comic']; // Only used for applying correct CSS styles in frontend
 const QUESTIONS_PER_FONT = 16;
 const OPTIONS_PER_QUESTION = 20;
 
 // Read all word sets from file
-const wordlist = await fsp.readFile(path.join(process.cwd(), 'words.json'));
+const wordlist = await fsp.readFile(path.join(process.cwd(), WORDLIST_FILE));
 const allWords = JSON.parse(wordlist).map(words => [...new Set(words)]); // Discard duplicate words
 
 // Standard Fisher-Yates shuffle
