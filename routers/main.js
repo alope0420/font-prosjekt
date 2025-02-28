@@ -34,18 +34,18 @@ router.post('/submit', async (req, res) => {
     }
 
     let {responses, totals, totalTime} = data;
-    const response_id = parseInt(await redis.get('last_response_id') ?? 0) + 1; // Display IDs 1-based
-    responses = responses.map(row => ({...row, response_id}));
-    totals = totals.map(row => ({...row, response_id}));
+    const responseId = parseInt(await redis.get('last_response_id') ?? 0) + 1; // Display IDs 1-based
+    responses = responses.map(row => ({...row, response_id: responseId}));
+    totals = totals.map(row => ({...row, response_id: responseId}));
 
     // Push new response to redis
-    await redis.set('last_response_id', response_id);
+    await redis.set('last_response_id', responseId);
     await redis.lpush('responses', ...responses);
     await redis.lpush('totals', ...totals);
     await redis.lpush('total_time', totalTime);
     console.log('redis done');
 
-    res.status(200).send({responseId: response_id});
+    res.status(200).send({responseId});
 });
 
 router.get('/responses', async (req, res) => {
