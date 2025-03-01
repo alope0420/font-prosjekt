@@ -15,7 +15,7 @@
     </div>
 
     <div id="intro-message">
-        <%- include ('intro-message') %>
+        <%- include ('messages/intro-message') %>
         <button class="btn btn-primary" onclick="startSurvey()">Start</button>
     </div>
     <div id="submit-message" class="d-none">
@@ -27,6 +27,7 @@
         </p>
     </div>
     <div id="exit-message" class="d-none">
+        <%- include ('messages/exit-message') %>
         <button class="btn btn-primary" onclick="window.location.reload()">Ta testen på nytt?</button>
         <p class="mt-4">
             Respons-ID: <span id="response-id">-</span>
