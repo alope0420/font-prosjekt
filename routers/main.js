@@ -33,7 +33,7 @@ async function renderTabularData(responseObject, redisLrangeName, columns) {
     const rows = responses.map(response => [...columns.map(col => response[col])]);
 
     // Render responses as table
-    responseObject.render('tabular_data', {columns, rows});
+    responseObject.render('tabular-data', {columns, rows});
 }
 
 router.get('/responses', async (req, res) => {
