@@ -1,0 +1,13 @@
+<ul>
+    <%
+    // Please change this if reusing code
+    const ansvarlige = {
+        alope0420: 'Alexander Rød Opedal',
+        balin6546: 'Bård Linga',
+        kerem9811: 'Ken Solbakken Remen',
+        thlon2720: 'Thomas Stavik Lønning',
+    };
+    for (const [epost, navn] of Object.entries(ansvarlige)) { %>
+        <li><%= navn %> (<a href="mailto:<%= epost %>@oslomet.no"><%= epost %>@oslomet.no</a>)</li>
+    <% } %>
+</ul>

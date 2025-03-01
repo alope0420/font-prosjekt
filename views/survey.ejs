@@ -45,18 +45,7 @@
             Takk for at du bidrar til forskningen!
         </p>
         <h2 class="fs-5">Ansvarlige for skjemaet</h2>
-        <ul>
-            <%
-            const ansvarlige = {
-                alope0420: 'Alexander Rød Opedal',
-                balin6546: 'Bård Linga',
-                kerem9811: 'Ken Solbakken Remen',
-                thlon2720: 'Thomas Stavik Lønning',
-            };
-            for (const [epost, navn] of Object.entries(ansvarlige)) { %>
-                <li><%= navn %> (<a href="mailto:<%= epost %>@oslomet.no"><%= epost %>@oslomet.no</a>)</li>
-            <% } %>
-        </ul>
+        <%- include ('contact-persons') %>
         <button class="btn btn-primary" onclick="startSurvey()">Start</button>
     </div>
     <div id="submit-message" class="d-none">
@@ -82,11 +71,7 @@
         <p>
             Hvis du er interessert i å lære mer om dette emnet eller se resultatene fra undersøkelsen, kan du sende en e-post til en av oss.
         </p>
-        <ul>
-        <% for (const [epost, navn] of Object.entries(ansvarlige)) { %>
-            <li><%= navn %> (<a href="mailto:<%= epost %>@oslomet.no"><%= epost %>@oslomet.no</a>)</li>
-        <% } %>
-        </ul>
+        <%- include ('contact-persons') %>
         <button class="btn btn-primary" onclick="window.location.reload()">Ta testen på nytt?</button>
         <p class="mt-4">
             Respons-ID: <span id="response-id">-</span>
