@@ -15,37 +15,7 @@
     </div>
 
     <div id="intro-message">
-        <p>
-            Velkommen til Fontfaktor! Denne undersøkelsen utforsker hvordan ulike fonter påvirker lesehastighet og nøyaktighet.
-            Din deltakelse vil bidra til verdifull innsikt i et spennende felt!
-        </p>
-        <h2 class="fs-5">Hva skal du gjøre?</h2>
-        <p>
-            Du vil bli presentert for et sett med oppgaver hvor du får et ord som du skal lete etter i en liste med lignende ord.
-            Oppgaven din er å finne og klikke på ordet så fort som mulig. Hvis du klikker feil, blir dette registrert,
-            men oppgaven fortsetter som før.
-        </p>
-        <h2 class="fs-5">Personvern</h2>
-        <p>
-            Vi samler ikke inn identifiserende data eller personopplysninger, det eneste som blir samlet er resultatene
-            og en tilfeldig generert ID. Resultatene vil bli brukt til å analysere hvordan ulike designvalg påvirker
-            lesehastighet og nøyaktighet, i forbindelse med et studentprosjekt ved OsloMet.
-        </p>
-        <h2 class="fs-5">Viktig informasjon</h2>
-        <p>For å sikre nøyaktige resultater i dette eksperimentet, vil nettleserens standardinnstillinger
-            for fonttype og -størrelse bli midlertidig overstyrt. Vi beklager eventuelle ulemper dette måtte medføre.
-            Tiden vil bli tatt underveis, så jobb raskt og nøyaktig! Undersøkelsen tar omtrent 3-5 minutter å fullføre.
-        </p>
-        <h2 class="fs-5">Samtykke</h2>
-        <p>
-            Ved å klikke på &laquo;Start&raquo; bekrefter du at du har lest og forstått informasjonen ovenfor,
-            og at du samtykker til å delta i eksperimentet.
-        </p>
-        <p>
-            Takk for at du bidrar til forskningen!
-        </p>
-        <h2 class="fs-5">Ansvarlige for skjemaet</h2>
-        <%- include ('contact-persons') %>
+        <%- include ('intro-message') %>
         <button class="btn btn-primary" onclick="startSurvey()">Start</button>
     </div>
     <div id="submit-message" class="d-none">
@@ -57,21 +27,6 @@
         </p>
     </div>
     <div id="exit-message" class="d-none">
-        <p>
-            Svarene er registrert.
-            Du brukte <span id="total-time">0</span> sekunder og hadde <span id="wrong-answers-text">0</span> feil.
-            Raskeste tid til nå er <span id="fastest-time" data-fastest-time="<%= fastestTime %>">0</span> s.
-            Takk for hjelpen!
-        </p>
-        <p>
-            Resultatene fra denne undersøkelsen vil bli analysert og brukt i et studentprosjekt ved OsloMet om hvordan
-            designvalg påvirker lesehastighet. Vi setter stor pris på din deltakelse, og bidraget ditt vil hjelpe oss
-            å forstå mer om hvordan fonter påvirker lesing.
-        </p>
-        <p>
-            Hvis du er interessert i å lære mer om dette emnet eller se resultatene fra undersøkelsen, kan du sende en e-post til en av oss.
-        </p>
-        <%- include ('contact-persons') %>
         <button class="btn btn-primary" onclick="window.location.reload()">Ta testen på nytt?</button>
         <p class="mt-4">
             Respons-ID: <span id="response-id">-</span>
